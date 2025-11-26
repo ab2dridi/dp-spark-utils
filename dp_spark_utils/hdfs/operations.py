@@ -5,12 +5,9 @@ This module contains functions for interacting with HDFS through PySpark,
 including file existence checks, listing directories, and moving files.
 """
 
-import logging
 from typing import List, Optional
 
 from pyspark.sql import SparkSession
-
-logger = logging.getLogger(__name__)
 
 
 def get_hadoop_fs(spark: SparkSession):
@@ -114,7 +111,6 @@ def hdfs_list_files(
     hdfs_path = spark._jvm.org.apache.hadoop.fs.Path(path)
 
     if not fs.exists(hdfs_path):
-        logger.warning("The path %s does not exist.", path)
         return []
 
     list_status = fs.listStatus(hdfs_path)
@@ -168,7 +164,6 @@ def move_files(
     # Create target directory if it doesn't exist
     if not fs.exists(target_path):
         fs.mkdirs(target_path)
-        logger.info("Created target directory: %s", target_folder)
 
     moved_files = []
     file_statuses = fs.listStatus(source_path)
@@ -188,11 +183,9 @@ def move_files(
         # Delete existing file if overwrite is enabled
         if overwrite and fs.exists(target_file):
             fs.delete(target_file, False)
-            logger.debug("Deleted existing file: %s", target_file)
 
         # Move the file
         fs.rename(source_file, target_file)
         moved_files.append(file_name)
-        logger.info("Moved file from %s to %s", source_file, target_file)
 
     return moved_files

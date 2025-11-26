@@ -5,11 +5,8 @@ This module contains functions for validating data, filenames, and schemas
 to ensure data quality and consistency in processing pipelines.
 """
 
-import logging
 import re
 from typing import List, Set, Tuple
-
-logger = logging.getLogger(__name__)
 
 
 def validate_columns_match(
@@ -73,16 +70,6 @@ def validate_columns_match(
     in_target_not_in_source = target_normalized - source_normalized
 
     is_match = not in_source_not_in_target and not in_target_not_in_source
-
-    if not is_match:
-        if in_source_not_in_target:
-            logger.warning(
-                "Columns in source but not in target: %s", in_source_not_in_target
-            )
-        if in_target_not_in_source:
-            logger.warning(
-                "Columns in target but not in source: %s", in_target_not_in_source
-            )
 
     return is_match, in_source_not_in_target, in_target_not_in_source
 
