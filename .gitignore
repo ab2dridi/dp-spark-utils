@@ -1,0 +1,17 @@
+# Compiled source #
+*.class
+
+# Logging 
+*.log
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+# IDEs and editors #
+.vscode/
+*.swp
+*.sublime-workspace
+*.sublime-project
+*.code-workspace
