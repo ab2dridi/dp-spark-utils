@@ -1,0 +1,70 @@
+[build-system]
+requires = ["setuptools>=65.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dp-spark-utils"
+version = "0.1.0"
+description = "Spark utilities for data platform - CDP 7.1.9 Cloudera"
+readme = "README.md"
+requires-python = ">=3.9,<3.11"
+license = {text = "MIT"}
+authors = [{name = "Your Name", email = "your.email@company.com"}]
+keywords = ["spark", "pyspark", "hdfs", "hive", "cloudera", "cdp", "data-platform"]
+classifiers = ["Development Status :: 3 - Alpha", "Intended Audience :: Developers", "License :: OSI Approved :: MIT License", "Natural Language :: English", "Operating System :: OS Independent", "Programming Language :: Python :: 3", "Programming Language :: Python :: 3.9", "Programming Language :: Python :: 3.10", "Topic :: Software Development :: Libraries :: Python Modules", "Topic :: Scientific/Engineering :: Information Analysis"]
+dependencies = ["pyspark>=3.3.2,<3.4"]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0.0", "pytest-cov>=4.0.0", "black>=23.0.0", "isort>=5.12.0", "flake8>=6.0.0", "mypy>=1.0.0", "pre-commit>=3.0.0"]
+
+[project.urls]
+Homepage = "https://gitlab.company.com/data-platform/dp-spark-utils"
+Documentation = "https://gitlab.company.com/data-platform/dp-spark-utils"
+Repository = "https://gitlab.company.com/data-platform/dp-spark-utils.git"
+"Bug Tracker" = "https://gitlab.company.com/data-platform/dp-spark-utils/-/issues"
+
+[tool.setuptools]
+packages = ["dp_spark_utils"]
+
+[tool.setuptools.package-data]
+dp_spark_utils = ["py.typed"]
+
+[tool.black]
+line-length = 100
+target-version = ["py39", "py310"]
+include = '\.pyi?$'
+extend-exclude = '''/(\.eggs|\.git|\.hg|\.mypy_cache|\.tox|\.venv|build|dist)/''' 
+
+[tool.isort]
+profile = "black"
+line_length = 100
+py_version = 39
+multi_line_mode = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+skip_glob = [".venv", ".tox", "build", "dist"]
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "--cov=dp_spark_utils --cov-report=html --cov-report=term-missing --cov-fail-under=80"
+
+[tool.coverage.run]
+source = ["dp_spark_utils"]
+omit = ["*/tests/*", "*/test_*.py", "*/__init__.py"]
+
+[tool.coverage.report]
+exclude_lines = ["pragma: no cover", "def __repr__", "raise AssertionError", "raise NotImplementedError", "if __name__ == .__main__.:", "if TYPE_CHECKING:"]
+precision = 2
