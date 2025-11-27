@@ -11,6 +11,15 @@ Modules:
     - schema: Schema and type mapping utilities
     - date: Date manipulation utilities
     - validation: Data validation utilities
+    - logging_config: Logging configuration utilities
+
+Logging Configuration:
+    This package supports custom logging systems. You can inject your own
+    logger using the configure_logging function:
+
+    >>> from dp_spark_utils import configure_logging
+    >>> from my_monitoring import Monitoring
+    >>> configure_logging(logger=Monitoring())
 """
 
 __version__ = "0.1.0"
@@ -36,6 +45,11 @@ from dp_spark_utils.hive import (
     check_table_exists,
     get_columns_map,
 )
+from dp_spark_utils.logging_config import (
+    configure_logging,
+    get_logger,
+    reset_logging,
+)
 from dp_spark_utils.schema import (
     get_ordered_columns_from_schema,
     map_spark_type,
@@ -46,6 +60,10 @@ from dp_spark_utils.validation import (
 )
 
 __all__ = [
+    # Logging configuration
+    "configure_logging",
+    "get_logger",
+    "reset_logging",
     # HDFS operations
     "get_hadoop_fs",
     "check_file_exists",
