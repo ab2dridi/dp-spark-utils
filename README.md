@@ -445,4 +445,3 @@ MIT License
 ## 👥 Auteurs
 
 Data Platform Team
-
