@@ -455,27 +455,40 @@ Si vous utilisez un système de logging personnalisé (par exemple une classe `M
 
 ```python
 import logging
-from your_monitoring_module import Monitoring
 
-# Votre système de logging personnalisé
+# Exemple : votre classe Monitoring personnalisée
+# class Monitoring:
+#     def info(self, message): ...
+#     def warning(self, message): ...
+#     def error(self, message): ...
+
+# Instancier votre système de logging personnalisé
 monitoring = Monitoring()
 
-# Option 1: Configurer le logging standard pour utiliser votre handler
+# Créer un handler personnalisé pour rediriger vers votre système
 class MonitoringHandler(logging.Handler):
-    """Handler personnalisé qui redirige vers votre système de monitoring."""
+    """
+    Handler personnalisé qui redirige vers votre système de monitoring.
+
+    Args:
+        monitoring_instance: Instance avec méthodes info(), warning(), error()
+    """
 
     def __init__(self, monitoring_instance):
         super().__init__()
         self.monitoring = monitoring_instance
 
     def emit(self, record):
-        log_message = self.format(record)
-        if record.levelno >= logging.ERROR:
-            self.monitoring.error(log_message)
-        elif record.levelno >= logging.WARNING:
-            self.monitoring.warning(log_message)
-        else:
-            self.monitoring.info(log_message)
+        try:
+            log_message = self.format(record)
+            if record.levelno >= logging.ERROR:
+                self.monitoring.error(log_message)
+            elif record.levelno >= logging.WARNING:
+                self.monitoring.warning(log_message)
+            else:
+                self.monitoring.info(log_message)
+        except Exception:
+            self.handleError(record)
 
 # Ajouter le handler aux loggers de dp-spark-utils
 dp_logger = logging.getLogger('dp_spark_utils')
