@@ -456,14 +456,26 @@ Si vous utilisez un système de logging personnalisé (par exemple une classe `M
 ```python
 import logging
 
-# Exemple : votre classe Monitoring personnalisée
-# class Monitoring:
-#     def info(self, message): ...
-#     def warning(self, message): ...
-#     def error(self, message): ...
+# Exemple de classe Monitoring personnalisée (à remplacer par votre propre implémentation)
+class Monitoring:
+    """Votre système de monitoring avec trame de logs spécifique."""
+
+    def info(self, message):
+        # Votre logique de logging info avec format personnalisé
+        pass
+
+    def warning(self, message):
+        # Votre logique de logging warning avec format personnalisé
+        pass
+
+    def error(self, message):
+        # Votre logique de logging error avec format personnalisé
+        pass
+
 
 # Instancier votre système de logging personnalisé
 monitoring = Monitoring()
+
 
 # Créer un handler personnalisé pour rediriger vers votre système
 class MonitoringHandler(logging.Handler):
@@ -489,6 +501,7 @@ class MonitoringHandler(logging.Handler):
                 self.monitoring.info(log_message)
         except Exception:
             self.handleError(record)
+
 
 # Ajouter le handler aux loggers de dp-spark-utils
 dp_logger = logging.getLogger('dp_spark_utils')
