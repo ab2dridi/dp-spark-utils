@@ -186,6 +186,56 @@ is_valid = validate_filename_pattern(
 )
 ```
 
+#### Configuration du logging personnalisé
+
+Le package `dp-spark-utils` supporte l'injection d'un système de logging personnalisé. Si vous avez votre propre classe de monitoring/logging (par exemple `Monitoring()`), vous pouvez la configurer pour que toutes les opérations du package utilisent votre logger.
+
+```python
+from dp_spark_utils import configure_logging, reset_logging
+
+# Exemple avec un logger personnalisé de type Monitoring
+from my_monitoring import Monitoring
+
+# Créer votre instance de logging personnalisé
+my_logger = Monitoring()
+
+# Configurer dp-spark-utils pour utiliser votre logger
+configure_logging(logger=my_logger)
+
+# Maintenant, tous les modules utilisent votre logger
+from dp_spark_utils import load_dataframe
+df = load_dataframe(spark, "database", "table")  # Les logs vont vers my_logger
+
+# Pour revenir au logging Python standard
+reset_logging()
+```
+
+Le logger personnalisé doit implémenter l'interface standard de logging avec les méthodes : `debug`, `info`, `warning`, `error`, et `critical`.
+
+```python
+# Exemple de classe Monitoring compatible
+class Monitoring:
+    def debug(self, msg, *args):
+        # Votre implémentation
+        pass
+
+    def info(self, msg, *args):
+        # Votre implémentation
+        pass
+
+    def warning(self, msg, *args):
+        # Votre implémentation
+        pass
+
+    def error(self, msg, *args):
+        # Votre implémentation
+        pass
+
+    def critical(self, msg, *args):
+        # Votre implémentation
+        pass
+```
+
 ## 📁 Structure du projet
 
 ```

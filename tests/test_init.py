@@ -106,6 +106,20 @@ class TestPackageImports:
         assert validate_columns_match is not None
         assert validate_filename_pattern is not None
 
+    def test_logging_functions_available(self):
+        """
+        Test that logging configuration functions are available at package level.
+        """
+        from dp_spark_utils import (
+            configure_logging,
+            get_logger,
+            reset_logging,
+        )
+
+        assert configure_logging is not None
+        assert get_logger is not None
+        assert reset_logging is not None
+
 
 class TestSubmoduleImports:
     """Tests for submodule imports."""

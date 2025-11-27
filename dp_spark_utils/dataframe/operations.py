@@ -6,14 +6,13 @@ including loading data from Hive, repartitioning, writing to various
 formats, and column operations.
 """
 
-import logging
 import math
 from typing import Dict, List, Optional, Tuple
 
 from pyspark.sql import DataFrame, SparkSession
 from pyspark.sql.functions import col
 
-logger = logging.getLogger(__name__)
+from dp_spark_utils.logging_config import get_logger
 
 
 def load_dataframe(
@@ -66,7 +65,7 @@ def load_dataframe(
     if cache:
         df = df.cache()
 
-    logger.info("Loaded DataFrame from %s", full_table_name)
+    get_logger(__name__).info("Loaded DataFrame from %s", full_table_name)
     return df
 
 
@@ -122,7 +121,7 @@ def repartition_dataframe(
 
     df = df.repartition(partitions)
 
-    logger.info(
+    get_logger(__name__).info(
         "Repartitioned DataFrame: %d rows into %d partitions", total_rows, partitions
     )
 
@@ -184,7 +183,7 @@ def write_dataframe_csv(
 
     writer.mode(mode).csv(output_path)
 
-    logger.info("Wrote DataFrame to CSV at %s", output_path)
+    get_logger(__name__).info("Wrote DataFrame to CSV at %s", output_path)
 
 
 def rename_columns(df: DataFrame, column_mapping: List[Dict[str, str]]) -> DataFrame:

@@ -5,7 +5,6 @@ This module contains functions for working with PySpark schemas and data types,
 including type mapping and schema manipulation utilities.
 """
 
-import logging
 import re
 from typing import Any, Dict, List, Optional
 
@@ -19,7 +18,7 @@ from pyspark.sql.types import (
     TimestampType,
 )
 
-logger = logging.getLogger(__name__)
+from dp_spark_utils.logging_config import get_logger
 
 # Default type mapping dictionary
 DEFAULT_TYPE_MAPPING: Dict[str, Any] = {
@@ -100,7 +99,7 @@ def map_spark_type(
         if re.search(key, type_name_lower, re.IGNORECASE):
             return spark_type
 
-    logger.debug(
+    get_logger(__name__).debug(
         "No mapping found for type '%s', using default: %s", type_name, default_type
     )
     return default_type

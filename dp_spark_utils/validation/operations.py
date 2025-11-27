@@ -5,11 +5,10 @@ This module contains functions for validating data, filenames, and schemas
 to ensure data quality and consistency in processing pipelines.
 """
 
-import logging
 import re
 from typing import List, Set, Tuple
 
-logger = logging.getLogger(__name__)
+from dp_spark_utils.logging_config import get_logger
 
 
 def validate_columns_match(
@@ -76,11 +75,11 @@ def validate_columns_match(
 
     if not is_match:
         if in_source_not_in_target:
-            logger.warning(
+            get_logger(__name__).warning(
                 "Columns in source but not in target: %s", in_source_not_in_target
             )
         if in_target_not_in_source:
-            logger.warning(
+            get_logger(__name__).warning(
                 "Columns in target but not in source: %s", in_target_not_in_source
             )
 

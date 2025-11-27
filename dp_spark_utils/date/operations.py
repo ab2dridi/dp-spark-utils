@@ -6,11 +6,8 @@ commonly used in data processing pipelines, such as calculating
 reporting periods and date boundaries.
 """
 
-import logging
 from datetime import date, datetime, timedelta
 from typing import Optional, Union
-
-logger = logging.getLogger(__name__)
 
 
 def get_last_day_of_previous_month(

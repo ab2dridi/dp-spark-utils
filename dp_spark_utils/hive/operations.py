@@ -5,12 +5,11 @@ This module contains functions for interacting with Hive tables through
 the PySpark Catalog API.
 """
 
-import logging
 from typing import Dict, List, Tuple
 
 from pyspark.sql import SparkSession
 
-logger = logging.getLogger(__name__)
+from dp_spark_utils.logging_config import get_logger
 
 
 def check_table_exists(spark: SparkSession, database: str, table_name: str) -> bool:
@@ -70,7 +69,7 @@ def get_columns_map(
     available_columns = [c.name for c in cols_meta]
     columns_map = {name.lower(): name for name in available_columns}
 
-    logger.debug(
+    get_logger(__name__).debug(
         "Retrieved %d columns from %s.%s", len(available_columns), database, table_name
     )
 
