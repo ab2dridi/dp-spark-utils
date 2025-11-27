@@ -438,6 +438,107 @@ pre-commit run flake8 --all-files
 - **Types** : Utiliser les annotations de type Python
 - **Tests** : Un fichier de test par module
 
+## 📝 Logging
+
+### Comportement du logging
+
+Ce package utilise le module standard `logging` de Python avec la convention `logging.getLogger(__name__)` pour chaque module. **Cela signifie que le package ne configure aucun handler, formatter ou niveau de log par défaut**.
+
+Cette approche garantit que :
+- **Pas d'impact sur votre système de logging existant** : Le package n'interfère pas avec votre configuration de logging personnalisée
+- **Contrôle total** : Vous gardez le contrôle complet sur la façon dont les logs sont formatés et où ils sont envoyés
+- **Intégration facile** : Le package s'intègre naturellement avec n'importe quel système de logging que vous utilisez
+
+### Intégration avec un système de logging personnalisé
+
+Si vous utilisez un système de logging personnalisé (par exemple une classe `Monitoring`), vous pouvez facilement intégrer les logs de `dp-spark-utils` :
+
+```python
+import logging
+
+# Exemple de classe Monitoring personnalisée (à remplacer par votre propre implémentation)
+class Monitoring:
+    """Votre système de monitoring avec trame de logs spécifique."""
+
+    def info(self, message):
+        # Votre logique de logging info avec format personnalisé
+        pass
+
+    def warning(self, message):
+        # Votre logique de logging warning avec format personnalisé
+        pass
+
+    def error(self, message):
+        # Votre logique de logging error avec format personnalisé
+        pass
+
+
+# Instancier votre système de logging personnalisé
+monitoring = Monitoring()
+
+
+# Créer un handler personnalisé pour rediriger vers votre système
+class MonitoringHandler(logging.Handler):
+    """
+    Handler personnalisé qui redirige vers votre système de monitoring.
+
+    Args:
+        monitoring_instance: Instance avec méthodes info(), warning(), error()
+    """
+
+    def __init__(self, monitoring_instance):
+        super().__init__()
+        self.monitoring = monitoring_instance
+
+    def emit(self, record):
+        try:
+            log_message = self.format(record)
+            if record.levelno >= logging.ERROR:
+                self.monitoring.error(log_message)
+            elif record.levelno >= logging.WARNING:
+                self.monitoring.warning(log_message)
+            else:
+                self.monitoring.info(log_message)
+        except Exception:
+            self.handleError(record)
+
+
+# Ajouter le handler aux loggers de dp-spark-utils
+dp_logger = logging.getLogger('dp_spark_utils')
+dp_logger.addHandler(MonitoringHandler(monitoring))
+dp_logger.setLevel(logging.INFO)
+```
+
+### Contrôler le niveau de log
+
+```python
+import logging
+
+# Activer les logs DEBUG pour tout le package
+logging.getLogger('dp_spark_utils').setLevel(logging.DEBUG)
+
+# Ou uniquement pour un module spécifique
+logging.getLogger('dp_spark_utils.hdfs').setLevel(logging.DEBUG)
+
+# Désactiver les logs du package
+logging.getLogger('dp_spark_utils').setLevel(logging.CRITICAL)
+```
+
+### Exemple avec une configuration de logging standard
+
+```python
+import logging
+
+# Configuration de base avec format personnalisé
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+
+# Maintenant les logs de dp-spark-utils utiliseront cette configuration
+from dp_spark_utils import check_file_exists
+```
+
 ## 📄 Licence
 
 MIT License
